@@ -3,10 +3,9 @@
 
 ## Run Azimuth locally
 [Azimuth](https://satijalab.org/azimuth/) is an annotation tool which is recommended by Satiji Lab (Seurat team).
-It also has R packages. However, running Azimuth in R requires internet connection，which is impossible when performing on computer cluster.
+ It also offers R packages. However, running Azimuth in R typically requires an internet connection, which can be impractical when using a computer cluster.
 
-I've changed the source code which allowed you running Azimuth locally.
-The only thing you have to do is download Azimuth reference data or make your own reference in required form.
+I've modified the source code so that you can now run Azimuth locally. You only need to download the Azimuth reference data or create your own reference in the required format.
 
 ```r
 rm(list=ls())
