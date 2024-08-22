@@ -30,3 +30,16 @@ SeuratObj <- RunAzimuth.Seurat(query = SeuratObj, reference = BM_refDir, assay =
 head(SeuratObj[[]])
 table(SeuratObj$predicted.celltype.l2)
 table(SeuratObj$predicted.celltype.l1)
+```
+## Generate Alluvial Plots with a Single Line of Code
+Many R packages can be used to make Alluvial plots, such as [easyalluvial](https://erblast.github.io/easyalluvial/), [ggforce](https://ggforce.data-imaginist.com/reference/geom_parallel_sets.html) and [ggalluvial](https://corybrunson.github.io/ggalluvial/).
+Here, I provide an easier way to make Alluvial Plots from the function `sc_Alluvial_pl`.
+```R
+source("./Alluvial_stack_barplot.R")
+# example for you to learn
+data(majors)
+majors$curriculum <- as.factor(majors$curriculum)
+p <- sc_Alluvial_pl(majors,x_key = "semester",
+stratum_group = "curriculum")
+p
+```
