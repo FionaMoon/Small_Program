@@ -36,13 +36,20 @@ theme_no_background <- function(base.theme = theme_bw(), pos = "right", legend_s
 ## stratum_group, the stack barplot group of your each barplot
 ## df should be a data.frame which contains the colunm of `x_key` and `stratum_group`
 
-sc_Alluvial_pl <- function(df , x_key, stratum_group){
-    x <- c(x_key, stratum_group)
-    df_plot <- as.data.frame(table(df[,x])) ## calculate Freq
-    colnames(df_plot) <- c("grp1", "grp2", "Freq")
-    df_plot <- ddply(df_plot,.(grp1),transform,percent=Freq/sum(Freq)*100) 
-    df_plot$label = paste0(sprintf("%.1f", df_plot$percent), "%")
+sc_Alluvial_pl <- function(df , x_key, order_x, stratum_group, percent = NULL){
 
+    if(is.null(percent) == T){
+        x <- c(x_key, stratum_group)
+        df_plot <- as.data.frame(table(df[,x])) ## calculate Freq
+        colnames(df_plot) <- c("grp1", "grp2", "Freq")
+        df_plot <- ddply(df_plot,.(grp1),transform,percent=Freq/sum(Freq)*100) 
+    } else {
+        x <- c(x_key, stratum_group, percent)
+        df_plot <- as.data.frame(df[,x]) 
+        colnames(df_plot) <- c("grp1", "grp2", "percent")
+    }
+
+    df_plot$label = paste0(sprintf("%.1f", df_plot$percent), "%")
     n_types <- length(unique(df_plot$grp2))
 
     if(n_types < 5){
@@ -62,6 +69,8 @@ sc_Alluvial_pl <- function(df , x_key, stratum_group){
 
     x <- is_alluvia_form(as.data.frame(df_plot), axes = 1:(ncol(df_plot)-1), silent = TRUE)
 
+    df_plot$grp1 <-  factor(df_plot$grp1, levels = order_x)
+
     if(x == T){
         # Alluvial plot without legend
     p <- ggplot(df_plot,
@@ -76,11 +85,3 @@ sc_Alluvial_pl <- function(df , x_key, stratum_group){
 
     return(p)
 }
-
-
-
-# # example for you to learn
-# data(majors)
-# majors$curriculum <- as.factor(majors$curriculum)
-# p <- sc_Alluvial_pl(majors,x_key = "semester",
-# stratum_group = "curriculum")
