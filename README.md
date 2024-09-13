@@ -60,10 +60,25 @@ colnames(df) <- c("CD33", "CD14", "Granulocytes", "Neutrophils", "DCs", "M1", "M
 library(tidyr)
 library(dplyr)
 df <- df %>% mutate(time = rownames(df))
+
 huNSGS <- df %>%
   pivot_longer(!time, names_to = "Celltypes", values_to = "percentage")
 
 p <- sc_Alluvial_pl(huNSGS,x_key = "time", order_x = c("7w", "8w", "11w", "17w"),
 stratum_group = "Celltypes", percent = "percentage")
 p
+```
+
+You can also define the color of the stratum.
+```R
+data(majors)
+majors$curriculum <- factor(majors$curriculum)
+colors <- c15[1:length(unique(majors$curriculum))]
+names(colors) <- levels(majors$curriculum)
+color
+
+p <- sc_Alluvial_pl(majors, x_key = "semester", 
+    order_x = c("CURR1", "CURR3", "CURR5", "CURR7", "CURR9", "CURR11", "CURR13", "CURR15"),
+stratum_group = "curriculum",
+color_use = colors)
 ```
