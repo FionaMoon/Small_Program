@@ -36,7 +36,7 @@ theme_no_background <- function(base.theme = theme_bw(), pos = "right", legend_s
 ## stratum_group, the stack barplot group of your each barplot
 ## df should be a data.frame which contains the colunm of `x_key` and `stratum_group`
 
-sc_Alluvial_pl <- function(df , x_key, order_x, stratum_group, percent = NULL){
+sc_Alluvial_pl <- function(df , x_key, order_x, stratum_group, percent = NULL, color_use = NULL){
 
     if(is.null(percent) == T){
         x <- c(x_key, stratum_group)
@@ -50,26 +50,36 @@ sc_Alluvial_pl <- function(df , x_key, order_x, stratum_group, percent = NULL){
     }
 
     df_plot$label = paste0(sprintf("%.1f", df_plot$percent), "%")
-    n_types <- length(unique(df_plot$grp2))
 
-    if(n_types < 5){
-            color_list = c4[1:n_types]
-    } else if(n_types < 13){
+    if(all(is.na(color_use)) == T){
+            n_types <- length(unique(df_plot$grp2))
+        if(n_types < 5){
+                color_list = c4[1:n_types]
+        } else if(n_types < 13){
             color_list = c_light12[1:n_types]
-    } else if(n_types < 16){
+        } else if(n_types < 16){
             color_list = c15[1:n_types]
-    } else if(n_types < 37){
+        } else if(n_types < 37){
             color_list = c36[1:n_types]    
-    } else {
+        } else {
             stop("Out of color boundery")
-    }
-
+        }
     col_define = color_list
     names(col_define) = unique(df_plot$grp2)
+    } else {
+        if(all(is.na(names(color_use))) == T){
+            stop("color_use should be given as a named vector! \n named by stratum_group")
+        } else {
+            col_define = color_use
+        }
+    }
+
 
     x <- is_alluvia_form(as.data.frame(df_plot), axes = 1:(ncol(df_plot)-1), silent = TRUE)
 
+
     df_plot$grp1 <-  factor(df_plot$grp1, levels = order_x)
+
 
     if(x == T){
         # Alluvial plot without legend
@@ -85,3 +95,43 @@ sc_Alluvial_pl <- function(df , x_key, order_x, stratum_group, percent = NULL){
 
     return(p)
 }
+
+
+
+# # # example for you to learn
+# data(majors)
+# majors$curriculum <- as.factor(majors$curriculum)
+# p <- sc_Alluvial_pl(majors, x_key = "semester", 
+#     order_x = c("CURR1", "CURR3", "CURR5", "CURR7", "CURR9", "CURR11", "CURR13", "CURR15"),
+# stratum_group = "curriculum")
+
+# # if we already calculate percentage
+# df <- read.table(text = "6  0.5 4   0.95    0.001   0.001   0.0012  0.01    0.0013  0.0025  91  0.75    0.95
+# 8.1 2.1 2.9 0.7 5   2   4.5 1   0.5 0.7 90  0.9 0.2
+# 8.1 2.1 2.9 0.7 5   2   4.5 1   0.5 0.7 90  0.9 0.2
+# 5.3 2.9 2.2 0.3 3.2 3.8 2.1 25  16  7   56  0.03    0.001
+# ")
+# rownames(df) <- c("7w", "8w", "11w", "17w")
+# colnames(df) <- c("CD33", "CD14", "Granulocytes", "Neutrophils", "DCs", "M1", "M2", "CD3", "CD4", "CD8", "B cell", "NK cell", "Plasma cell")
+# library(tidyr)
+# library(dplyr)
+# df <- df %>% mutate(time = rownames(df))
+# huNSGS <- df %>%
+#   pivot_longer(!time, names_to = "Celltypes", values_to = "percentage")
+
+# p <- sc_Alluvial_pl(huNSGS,x_key = "time", order_x = c("7w", "8w", "11w", "17w"),
+# stratum_group = "Celltypes", percent = "percentage")
+
+## if we define color to stratum
+# data(majors)
+# majors$curriculum <- factor(majors$curriculum)
+# colors <- c15[1:length(unique(majors$curriculum))]
+# names(colors) <- levels(majors$curriculum)
+# color
+#
+# p <- sc_Alluvial_pl(majors, x_key = "semester", 
+#     order_x = c("CURR1", "CURR3", "CURR5", "CURR7", "CURR9", "CURR11", "CURR13", "CURR15"),
+# stratum_group = "curriculum",
+# color_use = colors)
+
+## This function can be used with ggplot2 to enhance the appearance of plots.
