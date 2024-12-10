@@ -82,3 +82,19 @@ p <- sc_Alluvial_pl(majors, x_key = "semester",
 stratum_group = "curriculum",
 color_use = colors)
 ```
+
+## Easy_QPCR
+This is an efficient function designed to streamline the processing of qPCR data. This function offers an alternative to traditional Excel-based methods, providing a faster and more automated approach for analyzing qPCR results.
+Here's an example of how to use this function:
+```R
+source("/path/.../qpcr_function.R")
+
+data <- tidy_qpcr(qpcr, Housekeeping_gene = "ACTIN",
+                  Control = "TF-1",
+                  Exp = "TF-1_IFNa")
+
+plot_qpcr_data(data, facet = TRUE)
+
+plot_qpcr_data(data, facet = FALSE, target_name = "TFRC", use_break =F,
+               color = c("grey","#e06666"))
+```
