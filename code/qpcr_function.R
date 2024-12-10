@@ -108,6 +108,11 @@ plot_qpcr_data <- function(combined_df, facet = TRUE, color = "jco",
                        comparisons = list(unique(combined_df$Sample)), 
                        method = 't.test',
                        bracket.size = 0.5)
+ # ns: p > 0.05
+# *: p <= 0.05
+# **: p <= 0.01
+# ***: p <= 0.001
+# ****: p <= 0.0001
   
   # Apply y-axis break if use_break is TRUE and both lowerbreak and upperbreak are provided
   if (use_break) {
