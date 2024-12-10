@@ -43,7 +43,7 @@ tidy_qpcr <- function(x, Housekeeping_gene, Control, Exp){
   qpcr_with_deltaCt <- qpcr %>%
     filter(Target != c(Housekeeping_gene)) %>%
     left_join(housekeeping, by = "Sample") %>%  # Join by Sample
-    mutate(deltaCt = housekeeping_Ct - Cq)  # Calculate ΔCt
+    mutate(deltaCt =  Cq - housekeeping_Ct)  # Calculate ΔCt
   
   ## 2^-△△Ct = Exp△Ct - Control△Ct(reference Ct)
   Con <- qpcr_with_deltaCt %>%
