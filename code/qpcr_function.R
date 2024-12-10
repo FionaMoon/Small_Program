@@ -40,10 +40,10 @@ tidy_qpcr <- function(x, Housekeeping_gene, Control, Exp){
   # Calculate mean Cq for ACTIN
   
   ## △Ct =Gene△Ct- Housekeeping gene Ct）
-  qpcr_with_deltaCt <- qpcr %>%
+  qpcr_with_deltaCt <- x %>%
     filter(Target != c(Housekeeping_gene)) %>%
     left_join(housekeeping, by = "Sample") %>%  # Join by Sample
-    mutate(deltaCt =  Cq - housekeeping_Ct)  # Calculate ΔCt
+    mutate(deltaCt = Cq - housekeeping_Ct)  # Calculate ΔCt
   
   ## 2^-△△Ct = Exp△Ct - Control△Ct(reference Ct)
   Con <- qpcr_with_deltaCt %>%
@@ -140,5 +140,5 @@ qpcr <- data.frame(Well = c(paste0("A", seq(1:12)),
                    Sample = rep(c("TF-1", "TF-1_IFNa", "HEL", "HEL_IFNa"),times = 3, each =3),
                    Cq = c(16.09, 15.93, 15.91, 14.56, 14.67, 14.82, 15.18, 15.36, 15.28, 15.40,15.30, 15.38,
                           26.19,26.65,28.06,28.33,26.04,26.91,27.90,28.01,25.78,26.63,28.35,28.28,
-                          19.06,17.17,19.97,20.18,19.05,17.15,19.67,20.35,19.15,17.31,19.76,20.26)
+                          19.06,19.05,19.15,17.17,17.15,17.31,19.67,20.35,19.15,17.31,19.76,20.26)
 )
