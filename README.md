@@ -88,13 +88,16 @@ This is an efficient function designed to streamline the processing of qPCR data
 Here's an example of how to use this function:
 ```R
 source("/path/.../qpcr_function.R")
+head(qPCR) ## Built-in dataset， the input data should look like this
 
 data <- tidy_qpcr(qpcr, Housekeeping_gene = "ACTIN",
                   Control = "TF-1",
                   Exp = "TF-1_IFNa")
 
-plot_qpcr_data(data, facet = TRUE)
+## Plot one gene you are interested
+plot_qpcr_data(data, facet = FALSE, target_name = "TFRC", use_break =F, ## you can also add breaks if the bar is too long
+               color = c("grey","#e06666")) 
 
-plot_qpcr_data(data, facet = FALSE, target_name = "TFRC", use_break =F,
-               color = c("grey","#e06666"))
+## Plot all genes if there are no outliers
+plot_qpcr_data(data, facet = TRUE)
 ```
