@@ -94,10 +94,25 @@ data <- tidy_qpcr(qpcr, Housekeeping_gene = "ACTIN",
                   Control = "TF-1",
                   Exp = "TF-1_IFNa")
 
+
 ## Plot one gene you are interested
 plot_qpcr_data(data, facet = FALSE, target_name = "TFRC", use_break =F, ## you can also add breaks if the bar is too long
                color = c("grey","#e06666")) 
 
 ## Plot all genes if there are no outliers
 plot_qpcr_data(data, facet = TRUE)
+```
+Plotting by facets in ggplot2 can sometimes lack elegance. In such cases, you may consider using a loop for more control over the layout.
+```R
+pt_list <- list()
+genelist <- unique(data$Target)
+for(i in 1:length(genelist)){
+  p <- plot_qpcr_data(data, facet = F, target_name = genelist[i], use_break =F,
+                      color = c("grey","#e06666"))
+  pt_list[[i]] <- p
+}
+
+pdf(file = "Desktop/1.pdf", width = 4, height = 4)
+ print(pt_list)
+dev.off()
 ```
