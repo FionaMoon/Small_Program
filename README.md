@@ -88,7 +88,9 @@ This is an efficient function designed to streamline the processing of qPCR data
 Here's an example of how to use this function:
 ```R
 source("/path/.../qpcr_function.R")
-head(qPCR) ## Built-in dataset， the input data should look like this
+head(qpcr) ## Built-in dataset， the input data should look like this
+
+check_qpcr_data(qpcr) ## check whether input data is in right format
 
 data <- tidy_qpcr(qpcr, Housekeeping_gene = "ACTIN",
                   Control = "TF-1",
